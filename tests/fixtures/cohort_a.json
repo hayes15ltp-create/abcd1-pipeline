@@ -1,0 +1,24 @@
+{
+  "variants": [
+    {
+      "immutable_id": "SYNTHETIC-FIXTURE-A-001",
+      "source_record_id": "TEST-ROW-001",
+      "hgvs": "c.1A>G (software-test fixture)",
+      "original_representation": "test fixture only",
+      "assembly": "GRCh37",
+      "transcript": "NM_000033.3",
+      "classification": "Pathogenic",
+      "row_reference": "synthetic row 1"
+    },
+    {
+      "immutable_id": "SYNTHETIC-FIXTURE-X-001",
+      "source_record_id": "TEST-ROW-002",
+      "hgvs": "c.2G>A (software-test fixture)",
+      "original_representation": "test fixture only",
+      "assembly": "GRCh37",
+      "transcript": "NM_000033.3",
+      "classification": "VUS",
+      "row_reference": "synthetic row 2"
+    }
+  ]
+}

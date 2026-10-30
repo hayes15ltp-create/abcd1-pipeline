@@ -1,0 +1,26 @@
+from pathlib import Path
+
+COHORT = Path("data/fixtures/cohort.json")
+DATABASE = Path("data/abcd1.sqlite3")
+
+rule all:
+    input:
+        "data/exports/cohort.json",
+        "data/exports/cohort.csv"
+
+rule import_cohort:
+    input:
+        COHORT
+    output:
+        DATABASE
+    shell:
+        "python -m abcd1.cli --db {output} import-cohort {input} --date 2026-10-30"
+
+rule export_cohort:
+    input:
+        DATABASE
+    output:
+        "data/exports/cohort.json",
+        "data/exports/cohort.csv"
+    shell:
+        "python -m abcd1.cli --db {input} export-cohort data/exports"
