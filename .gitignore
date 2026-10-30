@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 data/*.sqlite3
+!data/verify.sqlite3
 data/*.sqlite3-shm
 data/*.sqlite3-wal
 data/exports/
