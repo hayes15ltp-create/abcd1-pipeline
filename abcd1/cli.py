@@ -99,3 +99,7 @@ def main() -> None:
         ).fetchall()
         print(json.dumps([dict(row) for row in rows], indent=2))
     conn.close()
+
+
+if __name__ == "__main__":
+    main()
