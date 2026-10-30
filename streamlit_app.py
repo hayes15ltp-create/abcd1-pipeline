@@ -1,22 +1,36 @@
 from __future__ import annotations
 
 import sqlite3
+from pathlib import Path
 
 import pandas as pd
 import streamlit as st
-
-from abcd1.db import connect
 
 st.set_page_config(page_title="ABCD1 Research Registry", layout="wide")
 st.title("ABCD1 research registry")
 st.caption("Public-data computational registry. This interface is planning/support tooling, not validated therapy evidence.")
 
-db_path = st.sidebar.text_input("SQLite database", "data/abcd1.sqlite3")
+db_path = st.sidebar.text_input("SQLite database", "data/verify.sqlite3")
+database_file = Path(db_path)
+
+if not database_file.is_file():
+    st.error(f"Database unavailable: {database_file} was not found.")
+    st.stop()
+
 try:
-    conn = connect(db_path)
+    conn = sqlite3.connect(f"file:{database_file.resolve()}?mode=ro", uri=True, timeout=30)
+    conn.row_factory = sqlite3.Row
 except sqlite3.Error as exc:
     st.error(f"Database unavailable: {exc}")
     st.stop()
+
+with database_file.open("rb") as file:
+    st.sidebar.download_button(
+        "Download SQLite database",
+        data=file.read(),
+        file_name=database_file.name,
+        mime="application/vnd.sqlite3",
+    )
 
 st.subheader("Active Pathogenic-only cohort")
 members = conn.execute(
@@ -52,3 +66,24 @@ methods = conn.execute(
     """
 ).fetchall()
 st.dataframe(pd.DataFrame([dict(row) for row in methods]), use_container_width=True)
+
+st.subheader("Database browser")
+table_names = [
+    row["name"]
+    for row in conn.execute(
+        """
+        SELECT name
+        FROM sqlite_master
+        WHERE type='table' AND name NOT LIKE 'sqlite_%'
+        ORDER BY name
+        """
+    )
+]
+selected_table = st.selectbox("Table", table_names)
+limit = st.number_input("Rows to display", min_value=1, max_value=10000, value=100, step=100)
+table_rows = conn.execute(
+    f'SELECT * FROM "{selected_table.replace(chr(34), chr(34) * 2)}" LIMIT ?',
+    (limit,),
+).fetchall()
+st.caption(f"{len(table_rows)} row(s) shown from {selected_table}")
+st.dataframe(pd.DataFrame([dict(row) for row in table_rows]), use_container_width=True)

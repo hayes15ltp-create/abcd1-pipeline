@@ -36,6 +36,10 @@ python -m pip install "streamlit>=1.49,<2" pandas
 python -m streamlit run streamlit_app.py
 ```
 
+The browser defaults to `data/verify.sqlite3`, which is the verification snapshot. It also
+provides read-only access to tables and a download button. Select a different SQLite path in
+the sidebar if needed.
+
 Snakemake is optional:
 
 ```powershell
