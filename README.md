@@ -21,6 +21,14 @@ python -m abcd1.scheduler --db data/abcd1.sqlite3 --once
 
 The fixture is explicitly synthetic. It exercises software gates only and must never be presented as a scientific registry cohort.
 
+## Automatic verification database updates
+
+Every push to `main`, manual workflow dispatch, and the Monday 12:00 UTC schedule runs the pipeline tests and adds 10 synthetic AAV software-verification records to `data/verify.sqlite3`.
+
+The GitHub Actions workflow `.github/workflows/autoupdate-verify.yml` commits the updated SQLite file back to `main`. The commit message includes `[skip ci]`, preventing database-update commits from recursively triggering another run. Streamlit deployments attached to the repository receive the committed database when they rebuild or refresh from `main`.
+
+These records are planning-only synthetic test data. The workflow does not import scientific registry variants or publish research evidence.
+
 ## Proof-of-concept commands
 
 ```powershell
