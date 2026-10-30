@@ -4,6 +4,10 @@ Date: October 30, 2026 (America/New_York).
 
 ## Passed
 
+- Ten synthetic AAV software-verification runs were scheduled, completed, and persisted in `data/verify.sqlite3` as logical run IDs 4-13.
+- The new AAV records are explicitly planning-only synthetic payloads and remain `unreviewed`; no scientific AAV result claim is made.
+- All 10 new database records passed the run/result persistence check.
+- The pytest suite passed under the uv runner: `3 passed`.
 - Python compilation and SQLite schema initialization.
 - Three pytest proof scenarios covering:
   1. queued concurrent deduplication, successful-result reuse, and version separation;
